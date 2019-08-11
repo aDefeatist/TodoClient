@@ -20,6 +20,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    // if using the same URL over and over, maybe move it to a CONST uptop. 
     axios.get('http://localhost:4000/')
       .then(res => {
         console.log(res);
@@ -48,6 +49,9 @@ class App extends React.Component {
       newArray.push(res.data);
       this.setState({ content: newArray });
     })
+    
+    // this resets the field but not the state. although next time you type IN the field it resets the state to whats in,
+    // it might be cleaner to do a this.setState({ title: '' }). still need the reset if you aren't having a controlled input as well.
     e.target.reset();
   }
 
@@ -61,6 +65,7 @@ class App extends React.Component {
   onDelete = (e) => {
     axios.delete('http://localhost:4000/', { data: { _id: e } })
     console.log(e);
+    // usually wont happen but what if this loop doesnt find the item? what would you do?
     this.state.content.forEach(item => {
       if(item._id === e){
         let newArray = this.state.content
@@ -72,6 +77,8 @@ class App extends React.Component {
   }
 
   onComplete = (e) => {
+    // you usually want to wait for the server response to update the UI. just incase an error occurs.
+    // i would put the forEach inside a then
     axios.put('http://localhost:4000/', { _id: e })
     console.log(e);
     this.state.content.forEach(item => {
@@ -85,6 +92,7 @@ class App extends React.Component {
     })
   }
 
+  // i don't know what this is, but thats ok
   handleClick (e) { if (e) {e.preventDefault()}; }
   
 
